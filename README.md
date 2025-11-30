@@ -398,6 +398,9 @@ class OtherLabelAugmenter:
 - 对多语言模型使用bert-base-multilingual-cased进行训练，并对13个测试集进行预测，结果如下。
 ![示例图片](./results/multilang1.png)
 ![示例图片](./results/multilang2.png)
+## 12.1-12.7完成工作
+### microsoft/mdeberta-v3-base
+
 ## 下周计划
 
 ### 1. 将三个训练集使用翻译api翻译后对测试集进行预测
