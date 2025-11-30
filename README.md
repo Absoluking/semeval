@@ -387,13 +387,23 @@ class OtherLabelAugmenter:
     return pd.DataFrame(augmented_data)
 ```
 ### 3. 参数调整
-
+## 11.24-11.30完成工作
+### 单语言数据集训练并预测
+![示例图片](./results/single.png)
+### qwen3-max
+- 使用qwen3-max零样本提示学习对13个测试集进行预测，结果如下。
+![示例图片](./results/qwen1.png)
+![示例图片](./results/qwen2.png)
+### 多语言大模型
+- 对多语言模型使用bert-base-multilingual-cased进行训练，并对13个测试集进行预测，结果如下。
+![示例图片](./results/multilang1.png)
+![示例图片](./results/multilang2.png)
 ## 下周计划
 
-### 1. 尝试其他模型
+### 1. 将三个训练集使用翻译api翻译后对测试集进行预测
 
 
-### 2. 对单标签数据加强进行调整
+### 2. 一些语言的效果尤其不好可能需要数据增强
 
 ### 3. 进一步调整参数
 
