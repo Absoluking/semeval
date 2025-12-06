@@ -400,7 +400,47 @@ class OtherLabelAugmenter:
 ![示例图片](./results/multilang2.png)
 ## 12.1-12.7完成工作
 ### microsoft/mdeberta-v3-base
+### xlm-roberta-large
+#### 沿用之前的方法对xlm-roberta-large训练会出现预测全0 损失波动过大的情况 于是增加了梯度累积功能、优化器和线性预热
+- 优化器
 
+            self.optimizer = torch.optim.AdamW(
+                model.parameters(),
+                lr=learning_rate,
+                weight_decay=0.01,  # 增加权重衰减
+                eps=1e-8
+            )
+- 线性预热
+  ```
+            total_steps = len(train_dataset) * 3 // (batch_size * accumulation_steps)
+            warmup_steps = int(0.1 * total_steps)  # 10%的warmup
+            self.scheduler = get_linear_schedule_with_warmup(
+                self.optimizer,
+                num_warmup_steps=warmup_steps,
+                num_training_steps=total_steps
+            )
+- 梯度累积
+  ```
+            # 梯度累积：将损失除以累积步数
+            loss = outputs.loss / self.accumulation_steps
+            loss.backward()
+            total_loss += outputs.loss.item()
+            # 梯度累积
+            accumulation_counter += 1
+            if accumulation_counter % self.accumulation_steps == 0:
+                # 梯度裁剪 - 防止梯度爆炸
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+                self.optimizer.step()
+                self.scheduler.step()
+                self.optimizer.zero_grad()
+                accumulation_counter = 0
+  
+            # 处理剩余的梯度
+            if accumulation_counter > 0:
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+                self.optimizer.step()
+                self.scheduler.step()
+                self.optimizer.zero_grad()
 ## 下周计划
 
 ### 1. 将三个训练集使用翻译api翻译后对测试集进行预测
