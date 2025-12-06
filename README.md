@@ -400,6 +400,9 @@ class OtherLabelAugmenter:
 ![示例图片](./results/multilang2.png)
 ## 12.1-12.7完成工作
 ### microsoft/mdeberta-v3-base
+![示例图片](./results/mdeberta_1.png)
+#### 主办方增加了九种语言后结果
+
 ### xlm-roberta-large
 #### 沿用之前的方法对xlm-roberta-large训练会出现预测全0 损失波动过大的情况 于是增加了梯度累积功能、优化器和线性预热
 - 优化器
@@ -441,6 +444,11 @@ class OtherLabelAugmenter:
                 self.optimizer.step()
                 self.scheduler.step()
                 self.optimizer.zero_grad()
+![示例图片](./results/xlm_roberta_1.png)
+- learning_rate=1e-5,  
+- batch_size=4,        
+- accumulation_steps=8
+
 ## 下周计划
 
 ### 1. 将三个训练集使用翻译api翻译后对测试集进行预测
