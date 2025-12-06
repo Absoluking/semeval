@@ -459,7 +459,8 @@ class OtherLabelAugmenter:
 ![示例图片](./results/xlm_roberta22_2e-5_1.png)
 ![示例图片](./results/xlm_roberta22_2e-5_2.png)
 #### 调整batch_size=8
-
+![示例图片](./results/xlm_roberta22_batchsize8_1.png)
+![示例图片](./results/xlm_roberta22_batchsize8_2.png)
 ### IDEA-CCNL/Erlangshen-DeBERTa-v2-710M-Chinese
 ![示例图片](./results/erlangshen.png)
 
