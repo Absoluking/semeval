@@ -462,12 +462,5 @@ class OtherLabelAugmenter:
 
 ### IDEA-CCNL/Erlangshen-DeBERTa-v2-710M-Chinese
 ![示例图片](./results/erlangshen.png)
-## 下周计划
 
-### 1. 将三个训练集使用翻译api翻译后对测试集进行预测
-
-
-### 2. 一些语言的效果尤其不好可能需要数据增强
-
-### 3. 进一步调整参数
 
