@@ -2,7 +2,25 @@
 
 ## 基本信息
 - **项目名称**: SemEval 2026 Task 9 - Subtask 2: Multilingual Text Classification Challenge - Polarization Type Classification
-
+### *f1分数结果*
+---
+| 模型       | 中文f1score|多语言f1score|
+| :--------:   | :-----:       | :----: |
+|bert-base-uncased|0.63|-|
+|bert-base-chinese|0.72|-|
+|hfl/chinese-macbert-large|0.75|-|
+|hfl/chinese-roberta-wwm-ext-large |0.77|-|
+|hfl/chinese-roberta-wwm-ext|0.77|-|
+|IDEA-CCNL/Erlangshen-DeBERTa-v2-710M-Chinese|0.75|-|
+|qwen3-max|-|0.37|
+|microsoft/mdeberta-v3-base(优化前)|-|0.29|
+|bert-base-multilingual-cased|-|0.36|
+|microsoft/mdeberta-v3-base|-|0.42|
+|xlm-roberta-large|-|0.46|
+|microsoft/mdeberta-v3-base(22种语言)|-|0.41|
+|xlm-roberta-large(22种语言)|-|0.43|
+---
+- 由于支持Amharic, Arabic, Bengali, Burmese, Chinese, English, German, Hausa, Hindi, Italian, Khmer, Nepali, Odia, Persian, Polish, Punjabi, Russian, Spanish, Swahili, Telugu, Turkish, Urdu.这22种语言的编码器模型不多，因此最后选定在xlm-roberta-large上进行调整，最后的调整结果在Bengali，Hausa，Italian，Odia，Punjabi，Swahili，Telugu，English，German，Amharic这些语言上表现不是很好，观察数据集之后发现这些数据集的极化言论较少，因此选择人为数据增强。
 ## 11.17-11.23完成工作
 
 ### 1. 模型尝试 
@@ -11,10 +29,6 @@
 - 词汇处理
 uncased: 所有文本转换为小写 词汇表大小: 30,522 个词符 分词方式: WordPiece 分词
 
-#### bert-base-chinese
-##### 由于bert-base-uncased对中文任务不够友好 因此更换为了bert-base-chinese模型 bert-base-chinese 继承了 BERT 架构的核心思想，并针对中文做了优化。
-- 双向上下文理解：与传统的单向语言模型不同，BERT 在预训练时能够同时考虑一个词左右两侧的上下文，这使其能更深入地理解词语在特定语境中的确切含义。
-- 针对中文的优化：模型在大规模中文语料（如中文百科、新闻、书籍等）上进行预训练，词汇表和语言知识更贴合中文环境 。它采用基于字符的分词方式，这有效规避了中文分词错误可能带来的影响。
 #### bert-base-chinese
 ##### 由于bert-base-uncased对中文任务不够友好 因此更换为了bert-base-chinese模型 bert-base-chinese 继承了 BERT 架构的核心思想，并针对中文做了优化。
 - 双向上下文理解：与传统的单向语言模型不同，BERT 在预训练时能够同时考虑一个词左右两侧的上下文，这使其能更深入地理解词语在特定语境中的确切含义。
