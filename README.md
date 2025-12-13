@@ -20,6 +20,7 @@
 |microsoft/mdeberta-v3-base(22种语言)|-|0.41|
 |xlm-roberta-large(22种语言)|-|0.43|
 |focal loss(第一版)|-|0.35|
+|FGM(第一版)|-|0.44|
 ---
 - 由于支持Amharic, Arabic, Bengali, Burmese, Chinese, English, German, Hausa, Hindi, Italian, Khmer, Nepali, Odia, Persian, Polish, Punjabi, Russian, Spanish, Swahili, Telugu, Turkish, Urdu.这22种语言的编码器模型不多，因此最后选定在xlm-roberta-large上进行调整，最后的调整结果在Bengali，Hausa，Italian，Odia，Punjabi，Swahili，Telugu，English，German，Amharic这些语言上表现不是很好，观察数据集之后发现这些数据集的极化言论较少，因此选择人为数据增强。
 ## 11.17-11.23完成工作
