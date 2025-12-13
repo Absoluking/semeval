@@ -521,7 +521,8 @@ class OtherLabelAugmenter:
                 return self.loss_fn(outputs, labels)
  ```
 #### 结果
-
+![示例图片](./results/FGM1_1.png)
+![示例图片](./results/FGM1_2.png)
 ### focal loss
 - 实现
  ```
@@ -588,6 +589,13 @@ class OtherLabelAugmenter:
                 'best_thresh': best_thresh
             }
  ```
+#### 结果
+- alpha = 0.25
+![示例图片](./results/fl0.25_1.png)
+![示例图片](./results/fl0.25_2.png)
+- alpha = 0.75
+![示例图片](./results/fl0.75_1.png)
+![示例图片](./results/fl0.75_2.png)
 
 
 
