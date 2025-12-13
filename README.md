@@ -481,4 +481,142 @@ class OtherLabelAugmenter:
 ### IDEA-CCNL/Erlangshen-DeBERTa-v2-710M-Chinese
 ![示例图片](./results/erlangshen.png)
 
+## 12.8-12.14完成工作
+### FGM
+- 对抗训练模块
+ ```
+        class FGM:
+            def __init__(self, model):
+                self.model = model
+                self.backup = {}
+
+            def attack(self, epsilon=1.0, emb_name='word_embeddings'):
+                # 在embedding上添加扰动
+                for name, param in self.model.named_parameters():
+                    if param.requires_grad and emb_name in name:
+                        self.backup[name] = param.data.clone()
+                        norm = torch.norm(param.grad)
+                        if norm != 0 and not torch.isnan(norm):
+                            r_at = epsilon * param.grad / norm
+                            param.data.add_(r_at)
+
+            def restore(self, emb_name='word_embeddings'):
+                # 恢复embedding
+                for name, param in self.model.named_parameters():
+                    if param.requires_grad and emb_name in name:
+                        assert name in self.backup
+                        param.data = self.backup[name]
+                self.backup = {}
+ ```
+- 自定义损失函数
+ ```
+        class RobustLoss(nn.Module):
+            def __init__(self, pos_weights=None):
+                super().__init__()
+                # 使用 BCEWithLogitsLoss 并结合正样本权重
+                # pos_weights 应该是一个 tensor，长度等于标签数量
+                self.loss_fn = nn.BCEWithLogitsLoss(pos_weight=pos_weights)
+        
+            def forward(self, outputs, labels):
+                return self.loss_fn(outputs, labels)
+ ```
+#### 结果
+
+### focal loss
+- 实现
+ ```
+        class MultiLabelFocalLoss(nn.Module):
+            def __init__(self, alpha=0.75, gamma=2.0, reduction='mean'):
+                """
+                适用于多标签分类的 Focal Loss
+                Args:
+                    alpha (float): 平衡正负样本的权重。
+                                   正样本权重为 0.75，负样本为 0.25。
+                                   这有助于解决正样本过少导致 Recall 低的问题。
+                    gamma (float): 聚焦参数 (默认2.0)，增加难分样本的权重。
+                    reduction (str): 'mean', 'sum' 或 'none'
+                """
+                super(MultiLabelFocalLoss, self).__init__()
+                self.alpha = alpha
+                self.gamma = gamma
+                self.reduction = reduction
+        
+            def forward(self, inputs, targets):
+                """
+                inputs: Logits (未经过Sigmoid)
+                targets: Labels (0或1)
+                """
+                # BCE Loss (Reduction=None to keep per-element loss)
+                bce_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+                
+                # pt = exp(-BCE)
+                pt = torch.exp(-bce_loss)
+                
+                # Focal Loss Formula
+                # 如果 alpha 不为 None，则应用加权
+                if self.alpha is not None:
+                    # alpha_t: 如果 target=1 则为 alpha, 如果 target=0 则为 1-alpha
+                    alpha_t = self.alpha * targets + (1 - self.alpha) * (1 - targets)
+                    focal_loss = alpha_t * (1 - pt) ** self.gamma * bce_loss
+                else:
+                    focal_loss = (1 - pt) ** self.gamma * bce_loss
+                
+                if self.reduction == 'mean':
+                    return focal_loss.mean()
+                elif self.reduction == 'sum':
+                    return focal_loss.sum()
+                else:
+                    return focal_loss
+ ```
+- 动态阈值搜索
+ ```
+            best_f1 = 0
+            best_thresh = 0.5
+            
+            thresholds = np.arange(0.2, 0.65, 0.05) # [0.20, 0.25, ..., 0.60]
+            
+            for thresh in thresholds:
+                preds = (all_probs > thresh).astype(int)
+                f1 = f1_score(all_labels, preds, average='macro', zero_division=0)
+                if f1 > best_f1:
+                    best_f1 = f1
+                    best_thresh = thresh
+            
+            self.model.train()
+            return {
+                'f1_macro': best_f1,
+                'best_thresh': best_thresh
+            }
+ ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
