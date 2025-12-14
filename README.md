@@ -590,12 +590,15 @@ class OtherLabelAugmenter:
             }
  ```
 #### 结果
-- alpha = 0.25
+- focal loss   alpha = 0.25
 ![示例图片](./results/fl0.25_1.png)
 ![示例图片](./results/fl0.25_2.png)
-- alpha = 0.75
+- focal loss   alpha = 0.75
 ![示例图片](./results/fl0.75_1.png)
 ![示例图片](./results/fl0.75_2.png)
+- FGM+focal loss   alpha = 0.75
+![示例图片](./results/FGM_fl1.png)
+![示例图片](./results/FGM_fl2.png)
 
 
 
