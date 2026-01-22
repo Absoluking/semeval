@@ -20,6 +20,7 @@
 |microsoft/mdeberta-v3-base(22种语言)|-|0.41|
 |xlm-roberta-large(22种语言)|-|0.43|
 |focal loss(0.25)|-|0.35|
+|Weighted Layer Pooling|-|0.39|
 |focal loss(0.75)|-|0.46|
 |FGM(第一版)|-|0.44|
 |FGM + focal loss|-|0.46|
